@@ -45,6 +45,7 @@ var threeSum = function(nums) {
         else return 0;
     }
     let ans = [];
+    // [-4, -1, -1, 0, 1, 2, 2]
     function getTwoSum(nums, index, target){
             let left = index, right = nums.length - 1;
     //小于等于会压入同样的元素。
@@ -52,6 +53,7 @@ var threeSum = function(nums) {
         let leftVal = nums[left], rightVal = nums[right];
         if(leftVal + rightVal == target){
             ans.push([0 - target, leftVal, rightVal]);
+            // 可能存在多种满足条件的情况，所以不能直接跳出循环，例如[-1,2],[0,1]
             while(nums[left] == leftVal)left++;
             while(nums[right] == rightVal) right--;
         }
@@ -66,6 +68,10 @@ var threeSum = function(nums) {
 
     }
     for(let i = 0; i < nums.length; i++){
+        // 因为nums数组排序后，后面的数肯nums[i]大，如果nums[i]都大于0，肯定找不到三个数等于0。同时因为i之后的数也是大于0的，所以直接跳过
+        // 在[-2,-1,0,2]中，对于2来说也许存在-2，0能够使得三数之和等于0，但这一种情况在-2时就已经得到了，2只能向后看，避免重复
+        if(nums[i] > 0) break;
+        // 例如[-1,-1,0,1]，如果不跳过就会从出现重复[-1,0,1]。无需担心漏掉，因为在前一个相同数已经全部考虑到了
         if(i - 1 >= 0 && nums[i] == nums[i - 1]) continue;
         let cur = nums[i];
         //找到后面两个和为b + c  = -a
@@ -115,7 +121,7 @@ var fourSum = function(nums, target) {
     return (ans);
     function getThreeSum(nums, start, target, firstNum){
         for(let i = start; i < nums.length; i++){
-            // 跳过重复的数，在该数第一次出现时，就讨论过了
+            // 跳过重复的数，在该数第一次出现时，就讨论过了.出现重复数字，跳过。一定要是start之后的，否则对于[2,2,2,2]。会跳过
             if(i - 1 >= start && nums[i] == nums[i - 1]) continue;
             getTwoSum(nums, i + 1, target - nums[i], firstNum, nums[i]);
         }

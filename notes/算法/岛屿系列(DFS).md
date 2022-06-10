@@ -149,6 +149,38 @@ return max;
 };
 ```
 
+``` javascript
+var maxAreaOfIsland = function(grid) {
+    // 进行岛屿深度遍历计算
+    function DFS(x,y){
+        // 如果超出边界，或者遇到水就直接返回
+        if(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length || grid[x][y] == 0) return;
+        // 当前是陆地，加入面积然后淹没
+        area++, grid[x][y] = 0;
+        // 上下左右遍历，看有没有岛屿
+        let directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        for(let i = 0; i < 4; i++){
+            DFS(x + directions[i][0], y + directions[i][1], area);
+        }
+
+    }
+    let max = 0, area = 0;
+    // 发现一片岛屿，就开始进行DFS计算面积
+    for(let i = 0;  i < grid.length; i++){
+        for(let j = 0; j < grid[0].length; j++){
+            if(grid[i][j] == 1){
+                area = 0;
+                DFS(i, j);
+                max = Math.max(max, area);
+            }
+        }
+    }
+    return max;
+};
+```
+
+
+
 ## 1905 统计子岛屿
 
 - 重点就是，`在对第二个grid2进行深度优先遍历时，判断陆地是否在grid1中也是陆地`（即grid1[i][j]是0还是1）。如果不是，则说明不是子岛屿
